@@ -1,0 +1,133 @@
+﻿@model BookingApp_A12_2025_2026.Models.Hotel
+@{
+    ViewData["Title"] = "إضافة فندق جديد";
+}
+
+<div class="container mt-4" dir="rtl">
+    <h2 class="text-center mb-4">تعديل فندق </h2>
+
+    <form asp-controller="Hotel" asp-action="DoUpdateExistedHotel" method="post" enctype="multipart/form-data" class="border p-4 rounded-3 shadow-sm bg-light">
+		<input type="hidden" asp-for="Hotel_Id" />
+		<input type="hidden" asp-for="Hotel_Photo" />
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label asp-for="Hotel_Name" class="form-label"></label>
+                <input asp-for="Hotel_Name" class="form-control" required />
+                <span asp-validation-for="Hotel_Name" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="City_Id" class="form-label"></label>
+                <select asp-for="City_Id" class="form-select" required>
+                    <option value="">-- اختر المدينة --</option>
+                    @foreach (var city in ViewBag.Cities)
+                    {
+                        <option value="@city.City_Id">@city.City_Name</option>
+                    }
+                </select>
+                <span asp-validation-for="Hotel_Name" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Hotel_Stars" class="form-label"></label>
+                <input asp-for="Hotel_Stars" class="form-control" type="number" min="1" max="5" required />
+                <span asp-validation-for="Hotel_Stars" class="text-danger"></span>
+            </div>
+
+            <div class="col-md-6">
+                <img src="~/@Model.Hotel_Photo" width="200" />
+                <label asp-for="Hotel_Photo" class="form-label">صورة الفندق</label>
+                <input type="file" name="Hotel_Photo_File" accept="image/*" class="form-control" />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Hotel_Video" class="form-label"></label>
+                <input asp-for="Hotel_Video" class="form-control" placeholder="أدخل فقط رمز الفيديو من YouTube" />
+            </div>
+
+            <div class="col-12">
+                <label asp-for="Hotel_Description" class="form-label"></label>
+                <textarea asp-for="Hotel_Description" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Hotel_Phone" class="form-label"></label>
+                <input asp-for="Hotel_Phone" class="form-control" />
+            </div>
+
+           
+
+
+
+            <div class="col-12">
+                <label class="form-label">موقع الفندق على الخريطة</label>
+                <div id="map" style="height: 400px; border-radius: 10px;"></div>
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Hotel_Lat" class="form-label"></label>
+                <input asp-for="Hotel_Lat" id="Hotel_Lat" class="form-control" readonly />
+            </div>
+
+            <div class="col-md-6">
+                <label asp-for="Hotel_Lng" class="form-label"></label>
+                <input asp-for="Hotel_Lng" id="Hotel_Lng" class="form-control" readonly />
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-success px-5">حفظ البيانات </button>
+        </div>
+    </form>
+</div>
+
+<!-- ✅ كود JavaScript لتفعيل الخريطة -->
+<script>
+    let map;
+    let marker;
+
+    function initMap() {
+        // إعداد الموقع الافتراضي (القدس)
+        const defaultLocation = { lat: 31.7683, lng: 35.2137 };
+
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: defaultLocation,
+            zoom: 8,
+        });
+
+        marker = new google.maps.Marker({
+            position: defaultLocation,
+            map: map,
+            draggable: true,
+        });
+
+        // عند النقر على الخريطة
+        map.addListener("click", (e) => {
+            const lat = e.latLng.lat();
+            const lng = e.latLng.lng();
+            placeMarker(lat, lng);
+        });
+
+        // عند سحب العلامة
+        marker.addListener("dragend", () => {
+            const lat = marker.getPosition().lat();
+            const lng = marker.getPosition().lng();
+            updateInputs(lat, lng);
+        });
+    }
+
+    function placeMarker(lat, lng) {
+        marker.setPosition({ lat, lng });
+        updateInputs(lat, lng);
+    }
+
+    function updateInputs(lat, lng) {
+        document.getElementById("Hotel_Lat").value = lat.toFixed(6);
+        document.getElementById("Hotel_Lng").value = lng.toFixed(6);
+    }
+</script>
+
+<!-- 🔑 تضمين مكتبة Google Maps -->
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADwv4_84UrXKJhUov_hmys7CXLeBcOGM0&callback=initMap">
+</script>

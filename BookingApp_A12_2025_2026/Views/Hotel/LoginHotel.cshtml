@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "تسجيل دخول المدير";
+    Layout = null;
+}
+<div class="container mt-5" dir="rtl">
+<div class="login-page">
+    <div class="login-card">
+        <div class="login-header">
+            <h2>مرحبا بمدير الفندق</h2>
+            <p>الرجاء إدخال بيانات الدخول</p>
+        </div>
+
+        <form asp-controller="Hotel" asp-action="CheckLogin2" method="post" class="login-form">
+            <div class="form-group">
+                <label for="Hotel_Username">اسم المستخدم</label>
+                <input type="text" id="Hotel_Username" name="Hotel_Username" placeholder="أدخل اسم المستخدم" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Hotel_Password">كلمة المرور</label>
+                <input type="password" id="Hotel_Password" name="Hotel_Password" placeholder="أدخل كلمة المرور" required />
+            </div>
+
+            <button type="submit" class="btn-login">تسجيل الدخول</button>
+        </form>
+
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="error-message">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+    </div>
+</div>
+</div>
+
+<style>
+    /* الخلفية العامّة */
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* بطاقة الدخول */
+    .login-card {
+        background-color: #fff;
+        padding: 40px 30px;
+        border-radius: 20px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        width: 380px;
+        max-width: 90%;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+        }
+
+    .login-header h2 {
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    .login-header p {
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    /* الفورم */
+    .login-form .form-group {
+        margin-bottom: 20px;
+        text-align: left;
+    }
+
+    .login-form label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+        color: #555;
+    }
+
+    .login-form input {
+        width: 100%;
+        padding: 12px 15px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        outline: none;
+        font-size: 14px;
+        transition: border 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .login-form input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0,123,255,0.3);
+        }
+
+    /* زر الدخول */
+    .btn-login {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(45deg, #007bff, #00c6ff);
+        color: #fff;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+        .btn-login:hover {
+            background: linear-gradient(45deg, #0056b3, #00aaff);
+            transform: translateY(-2px);
+        }
+
+    /* رسالة الخطأ */
+    .error-message {
+        margin-top: 20px;
+        color: #e74c3c;
+        font-weight: bold;
+    }
+</style>

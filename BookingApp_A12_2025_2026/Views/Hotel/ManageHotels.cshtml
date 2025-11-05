@@ -1,0 +1,51 @@
+﻿@{
+    List<Hotel> hotels = ViewBag.hotels;
+}
+
+@if (ViewBag.msg != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        @ViewBag.msg
+        <button type="button" class="btn-close"
+                data-bs-dismiss="alert" aria-label="Close">
+        </button>
+
+    </div>
+}
+
+<div class="container mt-4" dir="rtl">
+    <h2 class="text-center mb-3">قائمة الفنادق</h2>
+    <a href="/Hotel/AddNewHotelView" class="btn btn-primary mb-3">إضافة فندق جديد</a>
+
+    <table class="table table-bordered table-hover text-center">
+        <thead class="table-light">
+            <tr>
+                <th>الرقم</th>
+                <th>الاسم</th>
+                <th>عدد النجوم</th>
+                <th>الصورة</th>
+                <th>الهاتف</th>
+                <th>إدارة</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var h in hotels)
+            {
+                <tr>
+                    <td>@h.Hotel_Id</td>
+                    <td>@h.Hotel_Name</td>
+                    <td>@h.Hotel_Stars ⭐</td>
+                    <td><img src="~/@h.Hotel_Photo" width="100" height="80"></td>
+                    <td>@h.Hotel_Phone</td>
+                    <td>
+                        <a class="btn btn-info" href="/Hotel/HotelDetails?Hotel_Id=@h.Hotel_Id">تفاصيل</a>
+                        <a class="btn btn-warning" href="/Hotel/EditHotel?Hotel_Id=@h.Hotel_Id">تعديل</a>
+                        <a class="btn btn-danger"
+                           onclick="return confirm('هل تريد حذف هذا الفندق؟');"
+                           href="/Hotel/DeleteHotel?Hotel_Id=@h.Hotel_Id">حذف</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

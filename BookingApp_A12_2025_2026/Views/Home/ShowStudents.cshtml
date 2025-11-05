@@ -1,0 +1,30 @@
+﻿@{
+    List<Student> lst1 = ViewBag.lst1;
+   
+}
+
+
+<div class="container text-center">
+    <div class="row g-3">
+        @foreach(var st in lst1)
+        {
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                    <img src="~/@st.Sora" class="card-img-top" alt="alt alt">
+                    <div class="card-body">
+                        <h5 class="card-title">@st.Name</h5>
+                        <p class="card-text">@st.Id</p>
+                        <a href="#" class="btn @(st.IsSport?"btn-success":"btn-warning")">Grades</a>
+                    </div>
+                </div>
+            </div>
+        }
+        
+        
+    </div>
+    
+
+    
+</div>
+
+

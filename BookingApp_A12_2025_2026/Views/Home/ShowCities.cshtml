@@ -1,0 +1,23 @@
+﻿@{
+    List<City> cities = ViewBag.cities;
+}
+<h1> Hi From ShowCities View Page </h1>
+<div class="container text-center">
+    <div class="row g-3">
+        @foreach (var ct in cities)
+        {
+            <div class="col">
+                <div class="card" style="width: 18rem;">
+                    <img src="~/@ct.City_Photo" class="card-img-top" alt="alt alt">
+                    <div class="card-body">
+                        <h5 class="card-title">@ct.City_Name</h5>
+                        <p class="card-text">@ct.City_Description</p>
+                        <a href="#" class="btn @(ct.City_IsSafe ?
+                            "btn-success" : "btn-warning")">Is Safe?</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
