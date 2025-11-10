@@ -50,14 +50,9 @@ namespace BookingApp_A12_2025_2026
             app.UseSession();
             ////
 
-
-
-
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-            
-
-            app.UseRouting();
+           app.UseRouting();
 
             app.UseAuthorization();
 

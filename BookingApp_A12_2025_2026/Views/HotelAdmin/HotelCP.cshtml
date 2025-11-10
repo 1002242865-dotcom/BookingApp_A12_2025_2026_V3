@@ -1,5 +1,6 @@
 ﻿@{
     Hotel h1 = ViewBag.h1;
+    Layout = null;
 }
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
@@ -276,7 +277,7 @@
 
             <div class="user-profile">
                 <div class="user-info">
-                    <span>سارة علي</span>
+                    <span>@h1.Hotel_Username</span>
                     <small>مدير الفندق</small>
                 </div>
                 <button class="logout-btn">

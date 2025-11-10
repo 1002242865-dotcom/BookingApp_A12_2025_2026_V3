@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Security.Claims;
 
+
 namespace BookingApp_A12_2025_2026.Controllers
 {
     public class HotelController : Controller
@@ -167,7 +168,7 @@ namespace BookingApp_A12_2025_2026.Controllers
         public async Task<IActionResult> CheckLogin2Async(string Hotel_Username, string Hotel_Password)
         {
             Hotel h1 = Hotel.GetHotelByUsernameAndPassword(Hotel_Username, Hotel_Password);
-            if (h1 != null)
+            if (h1 != null) // if hotel login details are correct
             {
                 var claims = new List<Claim>
                         {
