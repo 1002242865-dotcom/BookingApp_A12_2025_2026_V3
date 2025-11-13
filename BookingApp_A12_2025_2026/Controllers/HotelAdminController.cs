@@ -36,7 +36,7 @@ namespace BookingApp_A12_2025_2026.Controllers
                 var newFileName = UploadFile(Hotel_Photo_File, "Photos").Result;
                 h1.Hotel_Photo = "Photos/" + newFileName;
             }
-            int x = Hotel.UpdateHotel(h1);
+            int x = Hotel.UpdateHotelIncludeUsername(h1);
             if (x == -1)
                 ViewBag.msg = "حدث خطأ أثناء التعديل، الرجاء المحاولة لاحقاً";
             else
