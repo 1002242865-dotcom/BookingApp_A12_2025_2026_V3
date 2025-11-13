@@ -1,348 +1,56 @@
 ﻿@{
     Hotel h1 = ViewBag.h1;
-    Layout = null;
+   
+    Layout = "~/Views/Shared/_HotelAdminLayout.cshtml";
 }
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم المدير - فندق الواحة الكبرى</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <style>
-        /* الأنماط العامة وإعادة التعيين */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif; /* يفضل استخدام خطوط عربية عصرية */
-        }
+<header class="top-header">
+    <h1>لوحة القيادة</h1>
+    <div class="header-actions">
+        <i class="fas fa-bell action-icon"></i>
+        <i class="fas fa-envelope action-icon"></i>
+        <i class="fas fa-search action-icon"></i>
+    </div>
+</header>
 
-        body {
-            background-color: #f4f7f6; /* خلفية هادئة */
-            color: #333;
-            direction: rtl; /* دعم اللغة العربية */
-        }
-
-        /* 1. هيكل التخطيط الرئيسي (Admin Layout) */
-        .admin-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        /* 2. الشريط الجانبي (Sidebar) */
-        .sidebar {
-            width: 280px;
-            background-color: #0b1e3e; /* الأزرق البحري الداكن */
-            color: #fff;
-            padding: 20px 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .logo-section {
-            padding: 0 20px 30px;
-            font-size: 24px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-        }
-
-        .logo-section i {
-            margin-left: 10px;
-            color: #00bcd4; /* لون مميز */
-        }
-
-        /* 2.1. التنقل (Navigation) */
-        .main-nav {
-            flex-grow: 1;
-            padding-top: 20px;
-        }
-
-        .nav-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 20px;
-            color: #b0c4de;
-            text-decoration: none;
-            transition: background-color 0.3s, color 0.3s;
-            border-right: 5px solid transparent; /* للحالة النشطة */
-        }
-
-        .nav-item i {
-            font-size: 18px;
-            margin-left: 15px;
-            width: 20px;
-        }
-
-        .nav-item:hover {
-            color: #fff;
-            background-color: rgba(255, 255, 255, 0.1);
-        }
-
-        .nav-item.active {
-            color: #fff;
-            background-color: #00bcd4;
-            border-right: 5px solid #fff;
-            font-weight: bold;
-        }
-
-        /* 2.2. ملف المستخدم */
-        .user-profile {
-            padding: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .user-profile span {
-            display: block;
-            font-weight: bold;
-        }
-
-        .user-profile small {
-            color: #a0a0a0;
-        }
-
-        .logout-btn {
-            background: none;
-            border: none;
-            color: #ff6347; /* لون مميز للخروج */
-            cursor: pointer;
-            font-size: 18px;
-            padding: 10px;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-
-        .logout-btn:hover {
-            background-color: rgba(255, 99, 71, 0.2);
-        }
-
-        /* 3. المحتوى الرئيسي (Main Content) */
-        .main-content {
-            flex-grow: 1;
-            padding: 30px;
-        }
-
-        /* 3.1. الشريط العلوي للمحتوى */
-        .top-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .top-header h1 {
-            font-size: 28px;
-            font-weight: 300;
-        }
-
-        .header-actions .action-icon {
-            font-size: 18px;
-            margin-right: 20px;
-            cursor: pointer;
-            color: #666;
-            transition: color 0.3s;
-        }
-
-        .header-actions .action-icon:hover {
-            color: #00bcd4;
-        }
-
-        /* 4. بطاقات لوحة القيادة (Dashboard Cards) */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-        }
-
-        .card {
-            background-color: #fff;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* تظليل خفيف وحديث */
-            transition: transform 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px); /* تأثير تحريك بسيط عند التحويم */
-        }
-
-        .card h2 {
-            font-size: 18px;
-            color: #444;
-            margin-bottom: 15px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-        }
-
-        /* تخصيص البطاقات */
-        .occupancy-card .data-display {
-            text-align: center;
-        }
-
-        .occupancy-chart {
-            font-size: 40px;
-            font-weight: bold;
-            color: #00bcd4;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .bookings-card ul, .activity-card ul {
-            list-style: none;
-            padding-right: 0;
-        }
-
-        .bookings-card li, .activity-card li {
-            padding: 8px 0;
-            border-bottom: 1px dashed #eee;
-            color: #555;
-        }
-
-        .bookings-card li i, .activity-card li i {
-            margin-left: 10px;
-            color: #00bcd4;
-        }
-
-        .view-all-link {
-            display: block;
-            text-align: left;
-            margin-top: 10px;
-            color: #00bcd4;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .revenue-card {
-            grid-column: span 3; /* جعل هذه البطاقة تمتد على كل الأعمدة */
-        }
-
-        .revenue-value {
-            font-size: 36px;
-            font-weight: bold;
-            color: #4CAF50; /* لون أخضر للإيرادات */
-            margin-bottom: 10px;
-        }
-
-        .chart-placeholder {
-            height: 150px;
-            background-color: #e8f5e9; /* خلفية خضراء فاتحة للمخطط */
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #4CAF50;
-            font-style: italic;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="admin-layout">
-
-        <aside class="sidebar">
-            <div class="logo-section">
-                <i class="fas fa-hotel"></i>
-                <span>فندق @h1.Hotel_Name</span>
-            </div>
-
-            <nav class="main-nav">
-                <a href="#" class="nav-item active">
-                    <i class="fas fa-chart-line"></i> لوحة القيادة
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-bed"></i> إدارة الغرف
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-calendar-check"></i> إدارة الحجوزات
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-users"></i> النزلاء
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-file-alt"></i> التقارير
-                </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-cog"></i> إعدادات الفندق
-                </a>
-            </nav>
-
-            <div class="user-profile">
-                <div class="user-info">
-                    <span>@h1.Hotel_Username</span>
-                    <small>مدير الفندق</small>
-                </div>
-                <button class="logout-btn">
-                    <i class="fas fa-sign-out-alt">
-                        <a asp-action="LogoutView" asp-controller="HotelAdmin">Logout</a>
-
-                    </i>
-                </button>
-            </div>
-        </aside>
-
-        <main class="main-content">
-            <header class="top-header">
-                <h1>لوحة القيادة</h1>
-                <div class="header-actions">
-                    <i class="fas fa-bell action-icon"></i>
-                    <i class="fas fa-envelope action-icon"></i>
-                    <i class="fas fa-search action-icon"></i>
-                </div>
-            </header>
-
-            <section class="dashboard-grid">
-                <div class="card occupancy-card">
-                    <h2>نسبة الإشغال اليوم</h2>
-                    <div class="data-display">
-                        <div class="occupancy-chart">78%</div>
-                        <p>125 محجوزة / 35 شاغرة</p>
-                    </div>
-                </div>
-
-                <div class="card bookings-card">
-                    <h2>الحجوزات القادمة (اليوم / الغد)</h2>
-                    <ul>
-                        <li><i class="fas fa-user"></i> الضيف: أحمد العلي | الوصول: 2 مساءً</li>
-                        <li><i class="fas fa-user"></i> الضيف: مريم رودريغز | الوصول: 4 عصراً</li>
-                    </ul>
-                    <a href="#" class="view-all-link">مشاهدة الكل</a>
-                </div>
-
-                <div class="card revenue-card full-width">
-                    <h2>إجمالي الإيرادات (آخر 7 أيام)</h2>
-                    <div class="revenue-value">$15,450</div>
-                    <div class="chart-placeholder">[مخطط بياني خطي]</div>
-                </div>
-
-                <div class="card activity-card">
-                    <h2>النشاط الأخير</h2>
-                    <ul>
-                        <li><i class="fas fa-check-circle"></i> تم تأكيد حجز الغرفة 201.</li>
-                        <li><i class="fas fa-pen"></i> تم تحديث سعر الغرفة 305.</li>
-                    </ul>
-                </div>
-
-                <div class="card activity-card">
-                    <h2>الغرف قيد الصيانة</h2>
-                    <ul>
-                        <li><i class="fas fa-tools"></i> الغرفة 105 (سباكة).</li>
-                        <li><i class="fas fa-tools"></i> الغرفة 412 (طلاء).</li>
-                    </ul>
-                </div>
-
-            </section>
-
-        </main>
+<section class="dashboard-grid">
+    <div class="card occupancy-card">
+        <h2>نسبة الإشغال اليوم</h2>
+        <div class="data-display">
+            <div class="occupancy-chart">78%</div>
+            <p>125 محجوزة / 35 شاغرة</p>
+        </div>
     </div>
 
-</body>
-</html>
+    <div class="card bookings-card">
+        <h2>الحجوزات القادمة (اليوم / الغد)</h2>
+        <ul>
+            <li><i class="fas fa-user"></i> الضيف: أحمد العلي | الوصول: 2 مساءً</li>
+            <li><i class="fas fa-user"></i> الضيف: مريم رودريغز | الوصول: 4 عصراً</li>
+        </ul>
+        <a href="#" class="view-all-link">مشاهدة الكل</a>
+    </div>
+
+    <div class="card revenue-card full-width">
+        <h2>إجمالي الإيرادات (آخر 7 أيام)</h2>
+        <div class="revenue-value">$15,450</div>
+        <div class="chart-placeholder">[مخطط بياني خطي]</div>
+    </div>
+
+    <div class="card activity-card">
+        <h2>النشاط الأخير</h2>
+        <ul>
+            <li><i class="fas fa-check-circle"></i> تم تأكيد حجز الغرفة 201.</li>
+            <li><i class="fas fa-pen"></i> تم تحديث سعر الغرفة 305.</li>
+        </ul>
+    </div>
+
+    <div class="card activity-card">
+        <h2>الغرف قيد الصيانة</h2>
+        <ul>
+            <li><i class="fas fa-tools"></i> الغرفة 105 (سباكة).</li>
+            <li><i class="fas fa-tools"></i> الغرفة 412 (طلاء).</li>
+        </ul>
+    </div>
+
+</section>
