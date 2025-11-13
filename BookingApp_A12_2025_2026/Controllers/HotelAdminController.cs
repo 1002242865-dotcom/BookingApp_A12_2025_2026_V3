@@ -41,7 +41,7 @@ namespace BookingApp_A12_2025_2026.Controllers
                 ViewBag.msg = "حدث خطأ أثناء التعديل، الرجاء المحاولة لاحقاً";
             else
                 ViewBag.msg = "تم تعديل الفندق " + h1.Hotel_Name + " بنجاح";
-           
+           ViewBag.h1 = h1;
             return View("HotelCP");
         }
 
