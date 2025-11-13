@@ -129,6 +129,18 @@ namespace BookingApp_A12_2025_2026.Models
             return rowsAffected;
         }
 
+        public static int UpdateHotelIncludeUsername(Hotel h1)
+        {
+            string sql = $"update Hotels set City_Id={h1.City_Id}, Hotel_Name='{h1.Hotel_Name}', Hotel_Stars={h1.Hotel_Stars}, Hotel_Photo='{h1.Hotel_Photo}', " +
+                $"Hotel_Video='{h1.Hotel_Video}', Hotel_Description='{h1.Hotel_Description}', Hotel_Lat={h1.Hotel_Lat}, Hotel_Lng={h1.Hotel_Lng}, " +
+                $"Hotel_Phone='{h1.Hotel_Phone}', Hotel_Username='{h1.Hotel_Username}',  Hotel_Password='{h1.Hotel_Password}' " +
+                $"where Hotel_Id={h1.Hotel_Id}";
+            Connector cn = new Connector(Configs.DataBaseLocation);
+            int rowsAffected = cn.RunUpdateInsertDelete(sql);
+            cn.CloseConnection();
+            return rowsAffected;
+        }
+
         public static Hotel GetHotelById(int Hotel_Id)
         {
             string sql = "select * from Hotels where Hotel_Id=" + Hotel_Id;
