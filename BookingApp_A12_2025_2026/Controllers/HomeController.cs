@@ -67,47 +67,27 @@ namespace BookingApp_A12_2025_2026.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-
-       
-
-
-        public IActionResult Index1()
-        {
-            int t = City.GetTotalCities();
-            ViewBag.t = t;
-            return View();
-        }
-        public IActionResult ShowStudents()
-        {
-
-            List<Student> lst1 = Student.GetDemoStudents();
-            //ViewData["students"] = students;
-
-            ViewBag.lst1 = lst1;
-            return View();
-        }
-
-
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
         
-       
-        public IActionResult LoginView()
+         
+         public IActionResult LoginView()
         {
+            if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                return RedirectToAction("AdminCP", "Admin");  
+            }
+            else
+                if (User.Identity.IsAuthenticated && User.IsInRole("HotelAdmin"))
+            {
+                return RedirectToAction("Index", "HotelAdmin");
+            }
+            else
+                if (User.Identity.IsAuthenticated && User.IsInRole("ClientAdmin"))
+            {
+                return RedirectToAction("AdminCP", "Admin");
+            }
+
             return View();
         }
-
-
         public async Task<IActionResult> CheckLoginAsync(string The_Username, string The_Password)
         {
             if (The_Password == "123456" && The_Username == "Admin")
@@ -188,8 +168,6 @@ namespace BookingApp_A12_2025_2026.Controllers
                 }
             }
         }
-
-
         public async Task<IActionResult> LogoutView()
         {
             await HttpContext.SignOutAsync();
@@ -197,6 +175,33 @@ namespace BookingApp_A12_2025_2026.Controllers
             return View("LoginView");
         }
 
+        public IActionResult Privacy()
+        {
+            return View();
+        }
 
-          }
+        public IActionResult Index1()
+        {
+            int t = City.GetTotalCities();
+            ViewBag.t = t;
+            return View();
+        }
+        public IActionResult ShowStudents()
+        {
+
+            List<Student> lst1 = Student.GetDemoStudents();
+            //ViewData["students"] = students;
+
+            ViewBag.lst1 = lst1;
+            return View();
+        }
+
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+    }
 }

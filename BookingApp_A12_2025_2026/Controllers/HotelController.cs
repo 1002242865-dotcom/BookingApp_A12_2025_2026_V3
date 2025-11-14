@@ -67,13 +67,7 @@ namespace BookingApp_A12_2025_2026.Controllers
             return View();
         }
 
-        public IActionResult ManageHotels()
-        {
-           List<Hotel> hotels = Hotel.GetAllHotelsFromDB();
-              ViewBag.hotels = hotels;
-            return View();
-        }
-
+        
         
 
         public IActionResult DoAddNewHotel(Hotel h1, IFormFile Hotel_Photo_File)

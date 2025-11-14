@@ -1,0 +1,101 @@
+﻿@{
+    Hotel h = ViewBag.h; // الكائن Hotel القادم من الـ Controller
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+
+<div class="container my-5" dir="rtl">
+    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="row g-0">
+            <!-- صورة الفندق -->
+            <div class="col-md-5">
+                <img src="~/@h.Hotel_Photo" alt="@h.Hotel_Name"
+                     class="img-fluid  w-100 object-fit-cover" />
+            </div>
+
+            <!-- تفاصيل الفندق -->
+            <div class="col-md-7">
+                <div class="card-body p-4">
+
+                    <h2 class="card-title fw-bold text-success mb-2">@h.Hotel_Name</h2>
+
+                    <div class="mb-3">
+                        @for (int i = 0; i < h.Hotel_Stars; i++)
+                        {
+                            <i class="bi bi-star-fill text-warning"></i>
+                        }
+                    </div>
+
+                    <p class="text-muted mb-3">
+                        <i class="bi bi-geo-alt-fill text-danger"></i>
+                        يقع في المدينة رقم: @h.City_Id
+                    </p>
+
+                    <p class="card-text fs-6 text-secondary mb-4" style="line-height: 1.8;">
+                        @h.Hotel_Description
+                    </p>
+
+                    <hr />
+
+                    <div class="mb-2">
+                        <i class="bi bi-telephone-fill text-success"></i>
+                        <strong class="me-2">هاتف:</strong> @h.Hotel_Phone
+                    </div>
+
+                    <div class="mb-2">
+                        <i class="bi bi-person-fill text-primary"></i>
+                        <strong class="me-2">اسم المستخدم:</strong> @h.Hotel_Username
+                    </div>
+
+                    
+                        <div class="mt-4">
+                            <h5 class="text-success mb-2">فيديو تعريفي:</h5>
+                            <div class="ratio ratio-16x9 rounded-3 overflow-hidden shadow-sm">
+                                <iframe src="https://www.youtube.com/embed/@h.Hotel_Video"
+                                        title="YouTube video"
+                                        allowfullscreen></iframe>
+                            </div>
+                        </div>
+                   
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- خريطة الموقع -->
+    <div class="card mt-4 border-0 shadow-sm rounded-4">
+        <div class="card-body">
+            <h4 class="text-center text-success mb-3">موقع الفندق على الخريطة</h4>
+            <div id="map" style="height: 400px; border-radius: 15px;"></div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        function initMap() {
+            const hotelLocation = { lat: @h.Hotel_Lat, lng: @h.Hotel_Lng };
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: hotelLocation,
+                zoom: 14,
+            });
+
+            new google.maps.Marker({
+                position: hotelLocation,
+                map: map,
+                title: "@h.Hotel_Name"
+            });
+        }
+
+        window.initMap = initMap;
+    </script>
+}
+
+<!-- 🔑 تضمين مكتبة Google Maps -->
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyADwv4_84UrXKJhUov_hmys7CXLeBcOGM0&callback=initMap">
+</script>
+

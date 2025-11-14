@@ -16,7 +16,7 @@
 
 <table class="table table-striped">
     <tr>
-        <td colspan="7">
+        <td colspan="8">
             <a class="btn btn-primary"
                asp-controller="Admin"
                asp-action="AddNewCityView">Add New City</a>
@@ -31,6 +31,7 @@
         <th>Delete</th>
         <th>EDIT</th>
         <th>Details</th>
+        <th>City Hotels</th>
     </tr>
     @foreach (var ct in cities)
     {
@@ -57,6 +58,13 @@
                    asp-controller="Admin"
                    asp-action="CityDetails"
                    asp-route-City_Id="@ct.City_Id">معلومات</a>
+            </td>
+
+            <td>
+                <a class="btn btn-light"
+                   asp-controller="Admin"
+                   asp-action="CityHotels"
+                   asp-route-City_Id="@ct.City_Id">فنادق المدينة</a>
             </td>
       </tr>  
     }

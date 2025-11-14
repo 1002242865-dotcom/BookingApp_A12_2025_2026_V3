@@ -18,6 +18,10 @@ namespace BookingApp_A12_2025_2026.Controllers
             return View();
         }
 
+        /// <summary>
+        /// CRUD Cities
+        /// </summary>
+        /// <returns></returns>
         public IActionResult ManageCities()
         {
             List<City> cities = City.GetAllCitiesFromDB();
@@ -107,6 +111,108 @@ namespace BookingApp_A12_2025_2026.Controllers
         }
 
 
+
+        /// <summary>
+        /// CRUD Hotels
+        /// </summary>
+        /// 
+        /// <returns></returns>
+        public IActionResult ManageHotels()
+        {
+            List<Hotel> hotels = Hotel.GetAllHotelsFromDB();
+            ViewBag.hotels = hotels;
+            return View();
+        }
+
+        public IActionResult CityHotels(int City_Id)
+        {
+            List<Hotel> hotels = Hotel.GetHotelsByCityId(City_Id);
+            ViewBag.hotels = hotels;
+            return View("ManageHotels");
+        }
+
+        public IActionResult AddNewHotelView()
+        {
+            List<City> cities = City.GetAllCitiesFromDB();
+            ViewBag.cities = cities;
+            ViewBag.cities = City.GetAllCitiesFromDB();
+
+            return View();
+        }
+
+        public IActionResult DoAddNewHotel(Hotel h1, IFormFile Hotel_Photo_File)
+        {
+            if (Hotel_Photo_File != null)
+            {
+                //upload file and get new file name
+                var newFileName = UploadFile(Hotel_Photo_File, "Photos").Result;
+                h1.Hotel_Photo = "Photos/" + newFileName;
+            }
+            int x = Hotel.AddNewHotel(h1);
+            if (x == -1)
+                ViewBag.msg = "حدث خطأ أثناء الاضافة، الرجاء المحاولة لاحقاً";
+            else
+                ViewBag.msg = "تم اضافة الفندق " + h1.Hotel_Name + " بنجاح";
+
+            List<Hotel> hotels = Hotel.GetAllHotelsFromDB();
+            ViewBag.hotels = hotels;
+            return View("ManageHotels");
+        }
+
+        public IActionResult DeleteHotel(int Hotel_Id)
+        {
+            int x = Hotel.DeleteHotelById(Hotel_Id);
+            if (x == -1)
+                ViewBag.msg = "حدث خطأ أثناء الحذف، الرجاء المحاولة لاحقاً";
+            else
+                ViewBag.msg = "تم حذف الفندق بنجاح";
+            List<Hotel> hotels = Hotel.GetAllHotelsFromDB();
+            ViewBag.hotels = hotels;
+            return View("ManageHotels");
+        }
+
+        public IActionResult EditHotel(int Hotel_Id)
+        {
+            Hotel h1 = Hotel.GetHotelById(Hotel_Id);
+            ViewBag.cities = City.GetAllCitiesFromDB();
+            return View(h1);
+        }
+
+        public IActionResult DoUpdateExistedHotel(Hotel h1, IFormFile Hotel_Photo_File)
+        {
+            if (Hotel_Photo_File != null)
+            {
+                //upload file and get new file name
+                var newFileName = UploadFile(Hotel_Photo_File, "Photos").Result;
+                h1.Hotel_Photo = "Photos/" + newFileName;
+            }
+            int x = Hotel.UpdateHotel(h1);
+            if (x == -1)
+                ViewBag.msg = "حدث خطأ أثناء التعديل، الرجاء المحاولة لاحقاً";
+            else
+                ViewBag.msg = "تم تعديل الفندق " + h1.Hotel_Name + " بنجاح";
+            List<Hotel> hotels = Hotel.GetAllHotelsFromDB();
+            ViewBag.hotels = hotels;
+            return View("ManageHotels");
+        }
+
+
+        public IActionResult HotelDetails(int Hotel_Id)
+        {
+            Hotel h = Hotel.GetHotelById(Hotel_Id);
+            ViewBag.h = h;
+            return View(h);
+        }
+
+
+
+
+        /// <summary>
+        /// UploadFile
+        /// </summary>
+        /// <param name="f1"></param>
+        /// <param name="folder"></param>
+        /// <returns></returns>
         private async Task<string> UploadFile(IFormFile f1, string folder)
         {
 
