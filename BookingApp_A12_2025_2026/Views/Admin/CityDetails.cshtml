@@ -1,0 +1,66 @@
+﻿@{
+    City ct = ViewBag.ct;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+<div class="container mt-5" dir="rtl">
+    <div class="card shadow-lg border-0 rounded-4 mx-auto" style="max-width: 900px;">
+        <div class="row g-0">
+            <div class="col-md-5">
+                <img src="~/@ct.City_Photo" class="img-fluid rounded-start" alt="@ct.City_Name" />
+            </div>
+            <div class="col-md-7">
+                <div class="card-body">
+                    <h2 class="card-title text-primary mb-3">@ct.City_Name</h2>
+                    <p class="card-text fs-5 text-muted">@ct.City_Description</p>
+                    <hr />
+                    <p>
+                        <strong>مستوى الأمان:</strong>
+                        <span class="badge @(ct.City_IsSafe ? "bg-success" : "bg-warning text-dark")">
+                            @(ct.City_IsSafe ? "آمنة" : "بحذر")
+                        </span>
+                    </p>
+
+                    <!-- فقرة تولدها الذكاء الاصطناعي -->
+                    <div class="alert alert-info mt-4">
+                        <h5>فقرة من الذكاء الاصطناعي:</h5>
+                        <p>
+                            @ViewBag.Response
+                        </p>
+                    </div>
+
+                    <!-- تضمين فيديو يوتيوب -->
+                    <div class="mt-4 text-center">
+                        <h5 class="text-secondary mb-3">شاهد فيديو حول المدينة:</h5>
+                        <div class="ratio ratio-16x9">
+
+                            <iframe width="560" height="315"
+                                    src="https://www.youtube.com/embed/@ct.City_Video?si=ZiPZ6RLQiE0tI-4Z"
+                                title="YouTube video player"  frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                                referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                            <iframe src="https://www.youtube.com/embed/@ct.City_Video"
+                                    title="YouTube video player"
+                                    allowfullscreen>
+                            </iframe>
+                        </div>
+                    </div>
+
+                    <a href="/Home/ManageCities" class="btn btn-outline-primary mt-4">
+                        <i class="bi bi-arrow-left"></i> العودة إلى قائمة المدن
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+

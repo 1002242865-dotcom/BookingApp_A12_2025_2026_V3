@@ -25,9 +25,9 @@ namespace BookingApp_A12_2025_2026
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = "/Hotel/LoginHotel"; // الصفحة التي يوجّه إليها عند الحاجة لتسجيل الدخول
-                    options.LogoutPath = "/Hotel/LogoutView"; // صفحة الخروج
-                    options.AccessDeniedPath = "/Hotel/AccessDenied"; // صفحة الرفض إن لم يكن لديه صلاحية
+                    options.LoginPath = "/Home/LoginView"; // الصفحة التي يوجّه إليها عند الحاجة لتسجيل الدخول
+                    options.LogoutPath = "/Home/LogoutView"; // صفحة الخروج
+                    options.AccessDeniedPath = "/Home/AccessDenied"; // صفحة الرفض إن لم يكن لديه صلاحية
                 });
 
             builder.Services.AddControllersWithViews();
@@ -58,7 +58,7 @@ namespace BookingApp_A12_2025_2026
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=LoginView}/{id?}");
 
             app.Run();
         }

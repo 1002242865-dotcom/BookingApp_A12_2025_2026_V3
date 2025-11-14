@@ -1,0 +1,56 @@
+﻿@{
+    //Hotel h1 = ViewBag.h1;
+   
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<header class="top-header">
+    <h1>لوحة القيادة</h1>
+    <div class="header-actions">
+        <i class="fas fa-bell action-icon"></i>
+        <i class="fas fa-envelope action-icon"></i>
+        <i class="fas fa-search action-icon"></i>
+    </div>
+</header>
+
+<section class="dashboard-grid">
+    <div class="card occupancy-card">
+        <h2>نسبة الإشغال اليوم</h2>
+        <div class="data-display">
+            <div class="occupancy-chart">78%</div>
+            <p>125 محجوزة / 35 شاغرة</p>
+        </div>
+    </div>
+
+    <div class="card bookings-card">
+        <h2>الحجوزات القادمة (اليوم / الغد)</h2>
+        <ul>
+            <li><i class="fas fa-user"></i> الضيف: أحمد العلي | الوصول: 2 مساءً</li>
+            <li><i class="fas fa-user"></i> الضيف: مريم رودريغز | الوصول: 4 عصراً</li>
+        </ul>
+        <a href="#" class="view-all-link">مشاهدة الكل</a>
+    </div>
+
+    <div class="card revenue-card full-width">
+        <h2>إجمالي الإيرادات (آخر 7 أيام)</h2>
+        <div class="revenue-value">$15,450</div>
+        <div class="chart-placeholder">[مخطط بياني خطي]</div>
+    </div>
+
+    <div class="card activity-card">
+        <h2>النشاط الأخير</h2>
+        <ul>
+            <li><i class="fas fa-check-circle"></i> تم تأكيد حجز الغرفة 201.</li>
+            <li><i class="fas fa-pen"></i> تم تحديث سعر الغرفة 305.</li>
+        </ul>
+    </div>
+
+    <div class="card activity-card">
+        <h2>الغرف قيد الصيانة</h2>
+        <ul>
+            <li><i class="fas fa-tools"></i> الغرفة 105 (سباكة).</li>
+            <li><i class="fas fa-tools"></i> الغرفة 412 (طلاء).</li>
+        </ul>
+    </div>
+
+</section>

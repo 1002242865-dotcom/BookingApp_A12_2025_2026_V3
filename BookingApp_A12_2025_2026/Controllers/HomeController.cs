@@ -1,7 +1,10 @@
 ﻿using BookingApp_A12_2025_2026.Models;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Data.OleDb;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace BookingApp_A12_2025_2026.Controllers
 {
@@ -14,6 +17,7 @@ namespace BookingApp_A12_2025_2026.Controllers
             _logger = logger;
         }
 
+        //هذه العملية هدفها الاساسي هو التمرن واستخدام جيميني
         public async Task<IActionResult> Index()
         {
            
@@ -68,67 +72,8 @@ namespace BookingApp_A12_2025_2026.Controllers
             return View();
         }
 
-        public IActionResult ShowCities()
-        {
-            ////Call the GetAllCity Method from the City Model
-            List<City> cities = City.GetAllCitiesFromDB();
-            //then send the List via ViewBag
-            ViewBag.cities = cities;
-            return View();
-        }
 
-        public IActionResult ManageCities()
-        {
-            //City ct = new City
-            //{
-            //    City_Name = "Test",
-            //    City_Location = "11111",
-            //    City_Photo = "7483748",
-            //    City_Description = "Test Desc",
-            //    City_Video = "47387483",
-            //    City_IsSafe = true,
-            //};
-            //int x = City.AddCityToDB(ct);
-
-
-            List<City> cities = City.GetAllCitiesFromDB();
-            ViewBag.cities = cities;
-            return View();
-        }
-
-        public IActionResult DeleteCity(int City_Id)
-        {
-            int x = City.DeleteCityById(City_Id);
-            if (x == -1)
-                ViewBag.msg = "حدث خطأ أثناء الحذف، الرجاء المحاولة لاحقاً";
-            else if (x == 0)
-                ViewBag.msg = "لم يتم حذف اي سجل";
-            else
-                ViewBag.msg = "تم حذف " + x + " سجلات بنجاح";
-            //حسب قيمة x 
-            //نقرر كيف والى اين نكمل
-            List<City> cities = City.GetAllCitiesFromDB();
-            ViewBag.cities = cities;
-            return View("ManageCities");
-        }
-
-        public async Task<IActionResult> CityDetailsAsync(int City_Id)
-        {
-            City ct = City.GetCityById(City_Id);
-            ViewBag.ct = ct;
-            var gemini = new GeminiService();
-            string prompt = "give details about 100 words in arabic about this city " + ct.City_Name;
-            var result = await gemini.AskAsync(prompt);
-            ViewBag.Response = result;
-            return View();
-        }
-
-        //public IActionResult CityDetails(int City_Id)
-        //{
-        //    City ct = City.GetCityById(City_Id);
-        //    ViewBag.ct = ct;
-        //       return View();
-        //}
+       
 
 
         public IActionResult Index1()
@@ -147,42 +92,7 @@ namespace BookingApp_A12_2025_2026.Controllers
             return View();
         }
 
-        public IActionResult AddNewCityView()
-        {
-            return View();
-        }
 
-
-        public IActionResult DoAddNewCity2(City ct)
-        {
-            int x = City.AddCityToDB(ct);
-            if(x>0)
-                ViewBag.msg = "تمت إضافة المدينة بنجاح";
-            else
-                ViewBag.msg = "حدث خطأ أثناء الإضافة، الرجاء المحاولة لاحقاً";
-            List<City> cities = City.GetAllCitiesFromDB();
-            ViewBag.cities = cities;
-            return View("ManageCities");
-        }
-
-        public IActionResult DoAddNewCity(City ct,IFormFile City_Photo_File)
-        {
-            //if City Photo File Was seletced 
-            if (City_Photo_File != null)
-            {
-                Task<string> tmp = UploadFile(City_Photo_File, "Photos");
-                ct.City_Photo = "Photos/"+tmp.Result;
-            }
-           int x= City.AddCityToDB(ct);
-            if (x == -1)
-                ViewBag.msg = "حدث خطأ أثناء الاضافة، الرجاء المحاولة لاحقاً";
-            else
-                ViewBag.msg = "تم اضافة مدينة "+ct.City_Name+" بنجاح";
-            List<City> cities = City.GetAllCitiesFromDB();
-            ViewBag.cities = cities;
-            return View("ManageCities");
-           // return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -191,49 +101,102 @@ namespace BookingApp_A12_2025_2026.Controllers
         }
 
         
-        public IActionResult CityUpdate(int City_Id)
+       
+        public IActionResult LoginView()
         {
-
-            City ct= City.GetCityById(City_Id);
-            return View(ct);
+            return View();
         }
 
 
-        public IActionResult DoUpdateExistedCity(City ct,IFormFile City_Photo_File)
+        public async Task<IActionResult> CheckLoginAsync(string The_Username, string The_Password)
         {
-            //if City Photo File Was seletced 
-            if (City_Photo_File != null)
+            if (The_Password == "123456" && The_Username == "Admin")
             {
-                Task<string> tmp = UploadFile(City_Photo_File, "Photos");
-                ct.City_Photo = "Photos/" + tmp.Result;
+                var claims = new List<Claim>
+                        {
+                        new Claim(ClaimTypes.Name, "1"),
+                        new Claim(ClaimTypes.Role,"Admin")
+                        };
+                var userIdentity = new ClaimsIdentity(claims, "SecureLogin");
+                var userPrincipal = new ClaimsPrincipal(userIdentity);
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                userPrincipal,
+                new AuthenticationProperties
+                {
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(5),
+                    IsPersistent = false,
+                    AllowRefresh = false
+                });
+                /////
+                return RedirectToAction("AdminCP", "Admin");
             }
-            int x = City.UpdateCityInDB(ct);
-            if (x == -1)
-                ViewBag.msg = "حدث خطأ أثناء التعديل، الرجاء المحاولة لاحقاً";
             else
-                ViewBag.msg = "تم تعديل مدينة " + ct.City_Name + " بنجاح";
-
-            List<City> cities = City.GetAllCitiesFromDB();
-            ViewBag.cities = cities;
-            return View("ManageCities");
-        }
-
-
-        private async Task<string> UploadFile(IFormFile f1, string folder)
-        {
-
-            //Where to Save File and change file name
-            var baseFolder = "wwwroot";
-            var newFileName = DateTime.Now.Ticks.ToString() + "_" + f1.FileName;
-            var filePath = baseFolder + "/" + folder + "/" + newFileName;
-
-            ///stream is good for large files size
-            using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                //async meaning in other thread
-                await f1.CopyToAsync(stream);
+
+
+                Hotel h1 = Hotel.GetHotelByUsernameAndPassword(The_Username, The_Password);
+                if (h1 != null) // if hotel login details are correct
+                {
+                    var claims = new List<Claim>
+                        {
+                        new Claim(ClaimTypes.Name, h1.Hotel_Id.ToString()),
+                        new Claim(ClaimTypes.Role,"HotelAdmin")
+                        };
+                    var userIdentity = new ClaimsIdentity(claims, "SecureLogin");
+                    var userPrincipal = new ClaimsPrincipal(userIdentity);
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                    userPrincipal,
+                    new AuthenticationProperties
+                    {
+                        ExpiresUtc = DateTime.UtcNow.AddMinutes(5),
+                        IsPersistent = false,
+                        AllowRefresh = false
+                    });
+                    /////
+                    return RedirectToAction("Index", "HotelAdmin");
+                }
+                else
+                {
+                    Client c1 = Client.GetClientByUsernameAndPassword(The_Username, The_Password);
+                    if (h1 != null) // if hotel login details are correct
+                    {
+                        var claims = new List<Claim>
+                        {
+                        new Claim(ClaimTypes.Name, c1.Client_Id.ToString()),
+                        new Claim(ClaimTypes.Role,"ClientlAdmin")
+                        };
+                        var userIdentity = new ClaimsIdentity(claims, "SecureLogin");
+                        var userPrincipal = new ClaimsPrincipal(userIdentity);
+
+                        await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                        userPrincipal,
+                        new AuthenticationProperties
+                        {
+                            ExpiresUtc = DateTime.UtcNow.AddMinutes(5),
+                            IsPersistent = false,
+                            AllowRefresh = false
+                        });
+                        /////
+                        return RedirectToAction("Index", "ClientlAdmin");
+                    }
+                    else
+                    { 
+                        ViewBag.msg = "خطأ في اسم المستخدم أو كلمة المرور، الرجاء المحاولة مجدداً";
+                        return View("LoginView");
+                    }
+                }
             }
-            return newFileName;
         }
-    }
+
+
+        public async Task<IActionResult> LogoutView()
+        {
+            await HttpContext.SignOutAsync();
+            ViewBag.msg = "تم تسجيل الخروج بنجاح";
+            return View("LoginView");
+        }
+
+
+          }
 }

@@ -1,0 +1,63 @@
+﻿@{
+    List<City> cities = ViewBag.cities;
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+}
+@if (ViewBag.msg != null)
+{
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    @ViewBag.msg
+    <button type="button" class="btn-close"
+            data-bs-dismiss="alert" aria-label="Close">
+    </button>
+
+</div>
+}
+
+<table class="table table-striped">
+    <tr>
+        <td colspan="7">
+            <a class="btn btn-primary"
+               asp-controller="Admin"
+               asp-action="AddNewCityView">Add New City</a>
+
+        </td>
+    </tr>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Image</th>
+        <th>Delete</th>
+        <th>EDIT</th>
+        <th>Details</th>
+    </tr>
+    @foreach (var ct in cities)
+    {
+      <tr>
+            <td>@ct.City_Id</td>
+            <td>@ct.City_Name</td>
+            <td>@ct.City_Description</td>
+            <td><img src="~/@ct.City_Photo" width="100" height="100"/></td>
+            <td>
+                <a class="btn btn-danger" 
+                asp-controller="Admin" 
+                asp-action="DeleteCity"
+                asp-route-City_Id="@ct.City_Id"
+                   onclick="return confirm('هل أنت متأكد أنك تريد حذف هذه المدينة:@ct.City_Name؟');">حذف</a>
+        </td>
+            <td>
+                <a class="btn btn-primary"
+                   asp-controller="Admin"
+                   asp-action="CityUpdate"
+                   asp-route-City_Id="@ct.City_Id">تعديل</a>
+            </td>
+            <td>
+                <a class="btn btn-info"
+                   asp-controller="Admin"
+                   asp-action="CityDetails"
+                   asp-route-City_Id="@ct.City_Id">معلومات</a>
+            </td>
+      </tr>  
+    }
+</table>

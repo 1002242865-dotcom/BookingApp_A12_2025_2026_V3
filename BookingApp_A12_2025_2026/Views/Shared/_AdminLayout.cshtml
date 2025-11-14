@@ -1,5 +1,5 @@
 ﻿@{
-    Hotel h1 = ViewBag.h1;
+    //Hotel h1 = ViewBag.h1;
     //Layout = null;
 }
 <!DOCTYPE html>
@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم المدير - فندق الواحة الكبرى</title>
+    <title>لوحة تحكم مدير عام الموقع</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -37,7 +37,7 @@
         /* 2. الشريط الجانبي (Sidebar) */
         .sidebar {
             width: 280px;
-            background-color: #0b1e3e; /* الأزرق البحري الداكن */
+            background-color: #1d1134; /* الأزرق البحري الداكن */
             color: #fff;
             padding: 20px 0;
             display: flex;
@@ -254,34 +254,36 @@
         <aside class="sidebar">
             <div class="logo-section">
                 <i class="fas fa-hotel"></i>
-                <span>فندق @h1.Hotel_Name</span>
+                <span>الادارة العامة </span>
             </div>
 
             <nav class="main-nav">
                 <a href="AdminCP" class="nav-item active">
                     <i class="fas fa-chart-line"></i> لوحة القيادة
                 </a>
-                <a href="#" class="nav-item">
-                    <i class="fas fa-bed"></i> إدارة الغرف
+                <a href="ManageCities" class="nav-item">
+                    <i class="fas fa-bed"></i> إدارة المدن
                 </a>
                 <a href="#" class="nav-item">
-                    <i class="fas fa-calendar-check"></i> إدارة الحجوزات
+                    <i class="fas fa-calendar-check"></i> إدارة الفنادق
                 </a>
                 <a href="#" class="nav-item">
-                    <i class="fas fa-users"></i> النزلاء
+                    <i class="fas fa-users"></i> إدارة النزلاء
+                </a>
+
+                <a href="#" class="nav-item">
+                    <i class="fas fa-users"></i> إدارة الحجوزات
                 </a>
                 <a href="#" class="nav-item">
                     <i class="fas fa-file-alt"></i> التقارير
                 </a>
-                <a href="HotelAdmin/EditHotel" class="nav-item">
-                    <i class="fas fa-cog"></i> إعدادات الفندق
-                </a>
+               
             </nav>
 
             <div class="user-profile">
                 <div class="user-info">
-                    <span>@h1.Hotel_Username</span>
-                    <small>مدير الفندق</small>
+                    <span>Admin</span>
+                    <small>المدير العام </small>
                 </div>
                 <button class="logout-btn">
                     <i class="fas fa-sign-out-alt">
@@ -294,7 +296,7 @@
 
         <main class="main-content" role="main">
             @RenderBody()
-         </main>
+        </main>
 
 
     </div>
