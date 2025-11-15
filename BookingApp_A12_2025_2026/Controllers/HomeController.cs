@@ -42,7 +42,7 @@ namespace BookingApp_A12_2025_2026.Controllers
             //prompt = "أكتب باللغة العربية وبدون مقدمات: نصيحة ذهبية للطلاب";
             prompt = "أكتب باللغة العربية وبدون مقدمات: بيت شعر مشهور";
 
-
+            //prompt=" ما هي عاصمة فرنسا؟ اعطني معلومات عن اهم فرق كرة القدم فيها";
 
             var result = await gemini.AskAsync(prompt);
 
@@ -139,7 +139,7 @@ namespace BookingApp_A12_2025_2026.Controllers
                 else
                 {
                     Client c1 = Client.GetClientByUsernameAndPassword(The_Username, The_Password);
-                    if (h1 != null) // if hotel login details are correct
+                    if (c1 != null) // if hotel login details are correct
                     {
                         var claims = new List<Claim>
                         {
@@ -201,6 +201,19 @@ namespace BookingApp_A12_2025_2026.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+
+        public IActionResult TestClient()
+        {
+            //Client cn = new Client { Client_Birthdate = DateTime.Now, Client_Name = "Test", Client_Password = "123", Client_Photo = "888", Client_Username = "Tester" };
+           // int c=Client.AddClient(cn);
+
+
+            //Client c1=Client.GetClientByUsernameAndPassword("Yazeed", "123123");
+            //int a = Client.DeleteClient(4);
+            List<Client> clients = Client.GetAllClients();
+            return View();
         }
 
     }
