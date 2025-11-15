@@ -8,6 +8,15 @@ namespace BookingApp_A12_2025_2026.Models
         public string Client_Username { get; set; }
         public string Client_Password { get; set; }
 
+        public DateTime Client_Birthdate { get; set; }
+
+        public string Client_Name { get; set; }
+
+        public string Client_Photo {  get; set; }
+
+
+       
+
         public static Client GetClientByUsernameAndPassword(string Client_Username, string Client_Password)
         {
             string sql = $"select * from Clients where Client_Username='{Client_Username}' and Client_Password='{Client_Password}'";
@@ -19,13 +28,19 @@ namespace BookingApp_A12_2025_2026.Models
             {
                 Client c1 = new Client
                 {
-                    Client_Username = (result["Client_Username"].ToString()),
+                    Client_Username = result["Client_Username"].ToString(),
                     Client_Password = result["Client_Password"].ToString(),
-                    Client_Id = int.Parse(result["Client_Id"].ToString())
+                    Client_Id = int.Parse(result["Client_Id"].ToString()),
+                    Client_Name= result["Client_Name"].ToString(),
+                    Client_Photo= result["Client_Photo"].ToString(),
+                    Client_Birthdate=DateTime.Parse(result["Client_Birthdate"].ToString())
                 };
                 return c1;
             }
             return null;
         }
+
+
+       
     }
 }
