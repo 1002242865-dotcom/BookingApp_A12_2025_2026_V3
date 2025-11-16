@@ -83,7 +83,7 @@ namespace BookingApp_A12_2025_2026.Controllers
             else
                 if (User.Identity.IsAuthenticated && User.IsInRole("ClientAdmin"))
             {
-                return RedirectToAction("AdminCP", "Admin");
+                return RedirectToAction("ClientCP", "ClientAdmin");
             }
 
             return View();
@@ -144,7 +144,7 @@ namespace BookingApp_A12_2025_2026.Controllers
                         var claims = new List<Claim>
                         {
                         new Claim(ClaimTypes.Name, c1.Client_Id.ToString()),
-                        new Claim(ClaimTypes.Role,"ClientlAdmin")
+                        new Claim(ClaimTypes.Role,"ClientAdmin")
                         };
                         var userIdentity = new ClaimsIdentity(claims, "SecureLogin");
                         var userPrincipal = new ClaimsPrincipal(userIdentity);
@@ -159,7 +159,7 @@ namespace BookingApp_A12_2025_2026.Controllers
                         });
                         /////
                         ViewBag.c1 = c1;
-                        return RedirectToAction("ClientCP", "ClientlAdmin");
+                        return RedirectToAction("ClientCP", "ClientAdmin");
                     }
                     else
                     { 
@@ -182,6 +182,12 @@ namespace BookingApp_A12_2025_2026.Controllers
             return View();
         }
 
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> DoSignUpAsync(Client c1, IFormFile Client_Photo_File)
         {
@@ -197,38 +203,21 @@ namespace BookingApp_A12_2025_2026.Controllers
                 ViewBag.ErrorMessage = "هنالك مشكلة في التسجيل";
                 return View("SignUp");
             }
-            if(x==1)
+            if (x == 1)
             {
                 //تسجيل الدخول
-                 c1 = Client.GetClientByUsernameAndPassword(c1.Client_Username, c1.Client_Password);
-                if (c1 != null) // if hotel login details are correct
+                return RedirectToAction("CheckLogin", new
                 {
-                    var claims = new List<Claim>
-                        {
-                        new Claim(ClaimTypes.Name, c1.Client_Id.ToString()),
-                        new Claim(ClaimTypes.Role,"ClientlAdmin")
-                        };
-                    var userIdentity = new ClaimsIdentity(claims, "SecureLogin");
-                    var userPrincipal = new ClaimsPrincipal(userIdentity);
-
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    userPrincipal,
-                    new AuthenticationProperties
-                    {
-                        ExpiresUtc = DateTime.UtcNow.AddMinutes(5),
-                        IsPersistent = false,
-                        AllowRefresh = false
-                    });
-                    /////
-                    ViewBag.c1 = c1;
-                    return RedirectToAction("ClientCP", "ClientlAdmin");
-                }
-                else
-                {
-                    ViewBag.msg = "خطأ في اسم المستخدم أو كلمة المرور، الرجاء المحاولة مجدداً";
-                    return View("LoginView");
-                }
+                    The_Username = c1.Client_Username,
+                    The_Password = c1.Client_Password
+                });
             }
+            else
+            {
+                ViewBag.msg = "خطأ في اسم المستخدم أو كلمة المرور، الرجاء المحاولة مجدداً";
+                return View("LoginView");
+            }
+            
             // من هنا تقوم بحفظ البيانات
             return View("SignUp");
         }
