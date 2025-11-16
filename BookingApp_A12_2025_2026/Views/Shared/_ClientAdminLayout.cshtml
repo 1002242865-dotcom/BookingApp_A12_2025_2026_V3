@@ -1,5 +1,5 @@
 ﻿@{
-    Hotel h1 = ViewBag.h1;
+    Client c1 = ViewBag.c1;
     //Layout = null;
 }
 <!DOCTYPE html>
@@ -254,7 +254,7 @@
         <aside class="sidebar">
             <div class="logo-section">
                 <i class="fas fa-hotel"></i>
-                <span>فندق @h1.Hotel_Name</span>
+                <span>اهلا وسهلا @c1.Client_Name</span>
             </div>
 
             <nav class="main-nav">
@@ -280,7 +280,7 @@
 
             <div class="user-profile">
                 <div class="user-info">
-                    <span>@h1.Hotel_Username</span>
+                    <span>@c1.Client_Username</span>
                     <small>مدير الفندق</small>
                 </div>
                 <button class="logout-btn">
@@ -294,7 +294,7 @@
 
         <main class="main-content" role="main">
             @RenderBody()
-         </main>
+        </main>
 
 
     </div>

@@ -158,7 +158,8 @@ namespace BookingApp_A12_2025_2026.Controllers
                             AllowRefresh = false
                         });
                         /////
-                        return RedirectToAction("Index", "ClientlAdmin");
+                        ViewBag.c1 = c1;
+                        return RedirectToAction("ClientCP", "ClientlAdmin");
                     }
                     else
                     { 
@@ -174,6 +175,64 @@ namespace BookingApp_A12_2025_2026.Controllers
             ViewBag.msg = "تم تسجيل الخروج بنجاح";
             return View("LoginView");
         }
+
+
+        public IActionResult SignUp()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DoSignUpAsync(Client c1, IFormFile Client_Photo_File)
+        {
+            c1.Client_Photo = "Photos/avatar.png";
+            if(Client_Photo_File != null)
+            {
+                Task<string> tmp = UploadFile(Client_Photo_File, "Photos");
+                c1.Client_Photo = "Photos/" + tmp.Result;
+            }
+            int x = Client.AddClient(c1);
+            if (x == 0)
+            {
+                ViewBag.ErrorMessage = "هنالك مشكلة في التسجيل";
+                return View("SignUp");
+            }
+            if(x==1)
+            {
+                //تسجيل الدخول
+                 c1 = Client.GetClientByUsernameAndPassword(c1.Client_Username, c1.Client_Password);
+                if (c1 != null) // if hotel login details are correct
+                {
+                    var claims = new List<Claim>
+                        {
+                        new Claim(ClaimTypes.Name, c1.Client_Id.ToString()),
+                        new Claim(ClaimTypes.Role,"ClientlAdmin")
+                        };
+                    var userIdentity = new ClaimsIdentity(claims, "SecureLogin");
+                    var userPrincipal = new ClaimsPrincipal(userIdentity);
+
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                    userPrincipal,
+                    new AuthenticationProperties
+                    {
+                        ExpiresUtc = DateTime.UtcNow.AddMinutes(5),
+                        IsPersistent = false,
+                        AllowRefresh = false
+                    });
+                    /////
+                    ViewBag.c1 = c1;
+                    return RedirectToAction("ClientCP", "ClientlAdmin");
+                }
+                else
+                {
+                    ViewBag.msg = "خطأ في اسم المستخدم أو كلمة المرور، الرجاء المحاولة مجدداً";
+                    return View("LoginView");
+                }
+            }
+            // من هنا تقوم بحفظ البيانات
+            return View("SignUp");
+        }
+
 
         public IActionResult Privacy()
         {
@@ -214,6 +273,25 @@ namespace BookingApp_A12_2025_2026.Controllers
             //int a = Client.DeleteClient(4);
             List<Client> clients = Client.GetAllClients();
             return View();
+        }
+
+
+
+        private async Task<string> UploadFile(IFormFile f1, string folder)
+        {
+
+            //Where to Save File and change file name
+            var baseFolder = "wwwroot";
+            var newFileName = DateTime.Now.Ticks.ToString() + "_" + f1.FileName;
+            var filePath = baseFolder + "/" + folder + "/" + newFileName;
+
+            ///stream is good for large files size
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                //async meaning in other thread
+                await f1.CopyToAsync(stream);
+            }
+            return newFileName;
         }
 
     }
